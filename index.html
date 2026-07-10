@@ -209,7 +209,7 @@
     .hlink{width:14px}
   }
   /* ── 지도 접기 토글 ── */
-  .map-toggle{display:none;width:100%;margin-top:16px;padding:12px;border:1.5px solid var(--brown);border-radius:10px;background:#fff;color:var(--brown);font-family:inherit;font-weight:700;font-size:.88rem;cursor:pointer;align-items:center;justify-content:center;gap:8px}
+  .map-toggle{display:none;position:relative;z-index:2;width:100%;margin-top:16px;padding:12px;border:1.5px solid var(--brown);border-radius:10px;background:#fff;color:var(--brown);font-family:inherit;font-weight:700;font-size:.88rem;cursor:pointer;align-items:center;justify-content:center;gap:8px}
   .map-toggle svg{transition:transform .25s}
   .map-wrap.open .map-toggle svg{transform:rotate(180deg)}
   /* ── 노선 지도 ── */
@@ -222,6 +222,11 @@
   .mkr svg{width:16px;height:16px}
   .mkr-hub{width:38px;height:38px;background:var(--brown);border-width:3px;box-shadow:0 0 0 5px rgba(164,75,35,.18),0 4px 12px rgba(42,33,27,.4)}
   .mkr-hub svg{width:20px;height:20px}
+  .map-wrap{position:relative}
+  .map-hint{position:absolute;top:36px;right:10px;z-index:1100;background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:.7rem;font-weight:700;color:var(--brown);box-shadow:0 2px 8px rgba(0,0,0,.14);display:flex;gap:5px;align-items:center;pointer-events:none}
+  .mkr-hub{position:relative}
+  .mkr-hub::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:3px solid rgba(164,75,35,.55);animation:ring 2s ease-out infinite}
+  @keyframes ring{0%{transform:scale(.75);opacity:1}100%{transform:scale(1.9);opacity:0}}
   /* ── 정류장 바텀시트 ── */
   .stop-sheet[hidden]{display:none!important}
   .stop-sheet{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1.5px solid var(--brown);
@@ -244,8 +249,9 @@
   @media (max-width:760px){
     .route-map{height:360px}.map-label{font-size:.64rem;padding:2px 8px}
     .map-toggle{display:flex}
-    .map-wrap .route-map,.map-wrap .map-note{display:none}
+    .map-wrap .route-map,.map-wrap .map-note,.map-wrap .map-hint{display:none}
     .map-wrap.open .route-map{display:block}
+    .map-wrap.open .map-hint{display:flex;top:12px}
     .map-wrap.open .route-map+ .map-note{display:block}
   }
 
@@ -475,6 +481,7 @@
           <span class="ko">노선 지도 보기</span><span class="en">Show Route Map</span>
         </button>
         <div class="route-map" id="map0" aria-label="노선 지도"></div>
+        <div class="map-hint" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">지점을 누르면 사진·정보 보기</span><span class="en">Tap a marker for photo &amp; info</span></div>
         <div class="stop-sheet" id="sheet0" hidden>
           <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20320%20180%22%3E%3Crect%20width%3D%22320%22%20height%3D%22180%22%20fill%3D%22%23ffffff%22/%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%22317%22%20height%3D%22177%22%20fill%3D%22none%22%20stroke%3D%22%23E9DECF%22%20stroke-width%3D%223%22/%3E%3Cg%20stroke%3D%22%23C9BBA8%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%22134%22%20y%3D%2266%22%20width%3D%2252%22%20height%3D%2240%22%20rx%3D%226%22/%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%2286%22%20r%3D%2210%22/%3E%3Cpath%20d%3D%22M147%2066l4-7h18l4%207%22/%3E%3C/g%3E%3Ctext%20x%3D%22160%22%20y%3D%22136%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20font-weight%3D%22600%22%20fill%3D%22%23A99A87%22%3E%ED%98%84%EC%9E%A5%20%EC%82%AC%EC%A7%84%20%EC%A4%80%EB%B9%84%20%EC%A4%91%3C/text%3E%3Ctext%20x%3D%22160%22%20y%3D%22154%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%229%22%20fill%3D%22%23C9BBA8%22%3EPhoto%20coming%20soon%3C/text%3E%3C/svg%3E" alt="정류장 현장 사진">
           <div class="ss-body">
@@ -505,6 +512,7 @@
           <span class="ko">노선 지도 보기</span><span class="en">Show Route Map</span>
         </button>
         <div class="route-map" id="map1" aria-label="노선 지도"></div>
+        <div class="map-hint" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">지점을 누르면 사진·정보 보기</span><span class="en">Tap a marker for photo &amp; info</span></div>
         <div class="stop-sheet" id="sheet1" hidden>
           <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20320%20180%22%3E%3Crect%20width%3D%22320%22%20height%3D%22180%22%20fill%3D%22%23ffffff%22/%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%22317%22%20height%3D%22177%22%20fill%3D%22none%22%20stroke%3D%22%23E9DECF%22%20stroke-width%3D%223%22/%3E%3Cg%20stroke%3D%22%23C9BBA8%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%22134%22%20y%3D%2266%22%20width%3D%2252%22%20height%3D%2240%22%20rx%3D%226%22/%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%2286%22%20r%3D%2210%22/%3E%3Cpath%20d%3D%22M147%2066l4-7h18l4%207%22/%3E%3C/g%3E%3Ctext%20x%3D%22160%22%20y%3D%22136%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20font-weight%3D%22600%22%20fill%3D%22%23A99A87%22%3E%ED%98%84%EC%9E%A5%20%EC%82%AC%EC%A7%84%20%EC%A4%80%EB%B9%84%20%EC%A4%91%3C/text%3E%3Ctext%20x%3D%22160%22%20y%3D%22154%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%229%22%20fill%3D%22%23C9BBA8%22%3EPhoto%20coming%20soon%3C/text%3E%3C/svg%3E" alt="정류장 현장 사진">
           <div class="ss-body">
@@ -535,6 +543,7 @@
           <span class="ko">노선 지도 보기</span><span class="en">Show Route Map</span>
         </button>
         <div class="route-map" id="map2" aria-label="노선 지도"></div>
+        <div class="map-hint" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">지점을 누르면 사진·정보 보기</span><span class="en">Tap a marker for photo &amp; info</span></div>
         <div class="stop-sheet" id="sheet2" hidden>
           <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20320%20180%22%3E%3Crect%20width%3D%22320%22%20height%3D%22180%22%20fill%3D%22%23ffffff%22/%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%22317%22%20height%3D%22177%22%20fill%3D%22none%22%20stroke%3D%22%23E9DECF%22%20stroke-width%3D%223%22/%3E%3Cg%20stroke%3D%22%23C9BBA8%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%22134%22%20y%3D%2266%22%20width%3D%2252%22%20height%3D%2240%22%20rx%3D%226%22/%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%2286%22%20r%3D%2210%22/%3E%3Cpath%20d%3D%22M147%2066l4-7h18l4%207%22/%3E%3C/g%3E%3Ctext%20x%3D%22160%22%20y%3D%22136%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2213%22%20font-weight%3D%22600%22%20fill%3D%22%23A99A87%22%3E%ED%98%84%EC%9E%A5%20%EC%82%AC%EC%A7%84%20%EC%A4%80%EB%B9%84%20%EC%A4%91%3C/text%3E%3Ctext%20x%3D%22160%22%20y%3D%22154%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%229%22%20fill%3D%22%23C9BBA8%22%3EPhoto%20coming%20soon%3C/text%3E%3C/svg%3E" alt="정류장 현장 사진">
           <div class="ss-body">
@@ -1005,8 +1014,11 @@ function initMap(i){
     mk.on("click", ()=>showSheet(i, h));
     L.polyline([UECO, h.c], {color:"#A44B23", weight:3.5, opacity:.85}).addTo(m);
   }
-  m.fitBounds(L.latLngBounds(pts).pad(0.18));
+  const bounds = L.latLngBounds(pts).pad(0.18);
+  m.fitBounds(bounds);
+  m.__bounds = bounds;
   maps[i] = m;
+  showSheet(i, HUB_INFO);  // 첫 열람 시 사용법 시연
 }
 // 바텀시트 닫기
 document.querySelectorAll(".stop-sheet .ss-close").forEach(btn=>{
@@ -1016,7 +1028,15 @@ document.querySelectorAll(".stop-sheet .ss-close").forEach(btn=>{
 const st = document.createElement("style");
 st.textContent = ".map-tt{background:transparent;border:none;box-shadow:none;padding:0}.map-tt::before{display:none}";
 document.head.appendChild(st);
-initMap(0);
+function mapVisible(i){
+  const el = document.getElementById("map"+i);
+  return el && el.getBoundingClientRect().width > 0;
+}
+function refitMap(i){
+  const m = maps[i]; if(!m) return;
+  setTimeout(()=>{ m.invalidateSize(); if(m.__bounds) m.fitBounds(m.__bounds); }, 80);
+}
+if (mapVisible(0)) initMap(0);
 
 // ── 셔틀 탭 ─────────────────────────────────────
 const tabs=document.querySelectorAll(".route-tab"), panels=document.querySelectorAll(".route-panel");
@@ -1026,8 +1046,7 @@ tabs.forEach(tab=>tab.addEventListener("click",()=>{
   tab.classList.add("on");tab.setAttribute("aria-selected","true");
   const idx = +tab.dataset.route;
   panels[idx].classList.add("on");
-  initMap(idx);
-  if(maps[idx]) setTimeout(()=>maps[idx].invalidateSize(), 50);
+  if (mapVisible(idx)) { initMap(idx); refitMap(idx); }
 }));
 
 
@@ -1040,7 +1059,7 @@ document.querySelectorAll(".map-toggle").forEach(btn=>{
     btn.setAttribute("aria-expanded", open);
     btn.querySelectorAll(".ko")[0].textContent = open ? "노선 지도 접기" : "노선 지도 보기";
     btn.querySelectorAll(".en")[0].textContent = open ? "Hide Route Map" : "Show Route Map";
-    if(open){ initMap(idx); setTimeout(()=>maps[idx]&&maps[idx].invalidateSize(), 60); }
+    if(open){ initMap(idx); refitMap(idx); }
   });
 });
 
