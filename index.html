@@ -128,7 +128,7 @@
   .guideline li::before{content:"";flex:0 0 8px;height:8px;margin-top:8px;background:#fff;border-radius:2px;transform:rotate(45deg)}
   .route-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:34px 0 22px}
   .route-tab{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;transition:.2s;font-family:inherit}
-  .route-tab .r-code{display:inline-flex;width:30px;height:30px;border-radius:50%;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff;background:var(--gray);margin-bottom:8px;transition:.2s}
+  .route-tab .r-code{display:inline-flex;width:34px;height:34px;border-radius:50%;align-items:center;justify-content:center;color:#fff;background:var(--gray);margin-bottom:8px;transition:.2s}
   .route-tab .r-name{display:block;font-weight:600;font-size:.95rem}
   .route-tab .r-name-en{display:block;font-size:.68rem;color:var(--ink-soft);margin-top:2px;letter-spacing:.04em}
   .route-tab:hover{border-color:var(--orange)}
@@ -155,12 +155,13 @@
 
   /* ── 노선 지도 ── */
   .route-map{height:340px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-top:20px;position:relative;z-index:1}
-  .route-map .leaflet-container{font-family:'Noto Sans KR',sans-serif}
+  .route-map .leaflet-container{font-family:'Noto Sans KR',sans-serif;background:#EDEAE4}
+  .route-map .leaflet-tile{filter:grayscale(.75) saturate(.6) brightness(1.06) contrast(.92)}
   .map-label{background:#fff;border:1.5px solid var(--brown);border-radius:99px;padding:2px 10px;font-size:.72rem;font-weight:700;color:var(--ink);box-shadow:0 2px 8px rgba(42,33,27,.15);white-space:nowrap}
   .map-label.hub{background:var(--brown);color:#fff}
   .map-label::before{display:none}
   .map-note{font-size:.76rem;color:var(--ink-soft);margin-top:8px}
-  @media (max-width:760px){.route-map{height:280px}}
+  @media (max-width:760px){.route-map{height:360px}.map-label{font-size:.64rem;padding:2px 8px}}
 
   /* ── 홍보데스크 ── */
   .infodesk{background:var(--paper-warm);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -387,17 +388,17 @@
 
     <div class="route-tabs" role="tablist" aria-label="셔틀버스 유형">
       <button class="route-tab on" role="tab" aria-selected="true" data-route="0">
-        <span class="r-code">순</span>
+        <span class="r-code"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 01-4 4H3"/></svg></span>
         <span class="r-name"><span class="ko">순환형</span><span class="en">Circular</span></span>
         <span class="r-name-en"><span class="ko">Circular Route</span><span class="en">Station &amp; Market</span></span>
       </button>
       <button class="route-tab" role="tab" aria-selected="false" data-route="1">
-        <span class="r-code">체</span>
+        <span class="r-code"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
         <span class="r-name"><span class="ko">체험형</span><span class="en">Thematic</span></span>
         <span class="r-name-en"><span class="ko">Thematic Route</span><span class="en">Experience Sites</span></span>
       </button>
       <button class="route-tab" role="tab" aria-selected="false" data-route="2">
-        <span class="r-code">지</span>
+        <span class="r-code"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg></span>
         <span class="r-name"><span class="ko">지원형</span><span class="en">Support</span></span>
         <span class="r-name-en"><span class="ko">Support Route</span><span class="en">Hotel Shuttle</span></span>
       </button>
@@ -686,17 +687,17 @@ const UECO = [35.555695, 129.131635];
 const MAP_DATA = [
   { // 순환형
     stops: [
-      {c:[35.551431,129.138506], ko:"울산역 (KTX)", en:"KTX Ulsan Station"},
-      {c:[35.562671,129.129715], ko:"언양임시시외버스터미널", en:"Eonyang Bus Terminal"},
-      {c:[35.563483,129.125934], ko:"언양알프스시장", en:"Eonyang Alps Market"}
+      {c:[35.551431,129.138506], ko:"울산역 (KTX)", en:"KTX Ulsan Station", dir:"right"},
+      {c:[35.562671,129.129715], ko:"언양임시시외버스터미널", en:"Eonyang Bus Terminal", dir:"right"},
+      {c:[35.563483,129.125934], ko:"언양알프스시장", en:"Eonyang Alps Market", dir:"left"}
     ]
   },
   { // 체험형
     stops: [
-      {c:[35.605047,129.179779], ko:"반구천의 암각화", en:"Bangucheon Petroglyphs"},
-      {c:[35.605026,129.140256], ko:"트레비어", en:"Trevier Brewery"},
-      {c:[35.585649,129.097532], ko:"복순도가", en:"Boksoon Doga"},
-      {c:[35.556882,129.114034], ko:"언양향교", en:"Eonyang Hyanggyo"}
+      {c:[35.605047,129.179779], ko:"반구천의 암각화", en:"Bangucheon Petroglyphs", dir:"top"},
+      {c:[35.605026,129.140256], ko:"트레비어", en:"Trevier Brewery", dir:"left"},
+      {c:[35.585649,129.097532], ko:"복순도가", en:"Boksoon Doga", dir:"left"},
+      {c:[35.556882,129.114034], ko:"언양향교", en:"Eonyang Hyanggyo", dir:"bottom"}
     ]
   },
   { // 지원형
@@ -712,8 +713,8 @@ function initMap(i){
   if(maps[i] || typeof L === "undefined") return;
   const d = MAP_DATA[i];
   const m = L.map("map"+i, {scrollWheelZoom:false});
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom:18}).addTo(m);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom:19}).addTo(m);
   const pts = [UECO];
   // 허브: 유에코
   L.circleMarker(UECO,{radius:9,color:"#7E3617",fillColor:"#A44B23",fillOpacity:1,weight:2.5}).addTo(m)
@@ -721,7 +722,7 @@ function initMap(i){
   d.stops.forEach(s=>{
     pts.push(s.c);
     L.circleMarker(s.c,{radius:7,color:"#C46212",fillColor:"#F58220",fillOpacity:1,weight:2}).addTo(m)
-     .bindTooltip(biLabel(s.ko,s.en,false),{permanent:true,direction:"top",offset:[0,-8],className:"map-tt"});
+     .bindTooltip(biLabel(s.ko,s.en,false),{permanent:true,direction:s.dir||"top",offset:s.dir==="bottom"?[0,8]:s.dir==="left"?[-9,0]:s.dir==="right"?[9,0]:[0,-8],className:"map-tt"});
     L.polyline([UECO,s.c],{color:"#F58220",weight:3,opacity:.6,dashArray:"7 7"}).addTo(m);
   });
   if(d.hotelArea){
@@ -730,7 +731,7 @@ function initMap(i){
      .bindTooltip(biLabel(d.hotelArea.ko,d.hotelArea.en,false),{permanent:true,direction:"center",className:"map-tt"});
     L.polyline([UECO,d.hotelArea.c],{color:"#F58220",weight:3,opacity:.6,dashArray:"7 7"}).addTo(m);
   }
-  m.fitBounds(L.latLngBounds(pts).pad(0.25));
+  m.fitBounds(L.latLngBounds(pts).pad(0.18));
   maps[i] = m;
 }
 // 툴팁 기본 스타일 무력화
