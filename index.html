@@ -96,7 +96,56 @@
   /* 행사 배너 */
 
   /* 행사별 셔틀 블록 */
-  .shuttle-box{margin-bottom:18px}
+  /* ── 월 탭 ── */
+  .month-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:34px 0 24px}
+  .m-tab{position:relative;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 6px 10px;text-align:center;cursor:pointer;font-family:inherit;transition:.2s;color:var(--ink)}
+  .m-tab b{display:block;font-size:1.3rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  .m-tab b small{font-size:.62em;font-weight:700;margin-left:1px}
+  .m-tab .m-en{font-size:.64rem;color:var(--ink-soft);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .m-tab .m-dot{position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--orange)}
+  .m-tab:hover{border-color:var(--orange)}
+  .m-tab.on{border-color:var(--brown);background:var(--brown);color:#fff;box-shadow:0 8px 20px rgba(164,75,35,.25)}
+  .m-tab.on .m-en{color:#fff;opacity:.75}
+  .m-tab.on .m-dot{background:#fff}
+  .m-tab.past:not(.on){opacity:.5}
+  .month-empty{background:#fff;border:1.5px dashed var(--line);border-radius:var(--radius);padding:44px 20px;text-align:center;color:var(--ink-soft)}
+  .month-event{margin-bottom:38px;animation:fadein .3s ease}
+  .month-event:last-of-type{margin-bottom:8px}
+  /* ── 행사 배너 ── */
+  .ebanner{position:relative;border-radius:var(--radius);overflow:hidden;color:#fff;background:linear-gradient(108deg,#6E2F12 0%,#A44B23 46%,#C4611E 100%);box-shadow:0 14px 34px rgba(126,54,23,.28);min-height:168px;display:flex;align-items:stretch}
+  .eb-photo{position:absolute;right:0;top:0;bottom:0;width:100%;object-fit:cover;object-position:center 30%}
+  .ebanner::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(50,22,8,.82) 0%,rgba(50,22,8,.45) 55%,rgba(50,22,8,.12) 100%)}
+  .eb-inner{position:relative;z-index:2;display:flex;align-items:center;gap:22px;width:100%;padding:24px 26px}
+  .eb-date{flex:0 0 auto;text-align:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:12px 18px;backdrop-filter:blur(4px)}
+  .eb-date b{display:block;font-size:1.9rem;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+  .eb-date span{font-size:.72rem;font-weight:600;opacity:.9;white-space:nowrap}
+  .eb-main{flex:1;min-width:0}
+  .eb-main h3{font-size:clamp(1.1rem,2.6vw,1.5rem);font-weight:800;line-height:1.3;text-shadow:0 2px 8px rgba(60,26,10,.35)}
+  .eb-venue{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-size:.78rem;font-weight:700;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:4px 13px;backdrop-filter:blur(4px)}
+  .eb-dday{position:absolute;top:16px;right:16px;z-index:3;font-size:.78rem;font-weight:800;letter-spacing:.04em;border-radius:99px;padding:6px 15px;background:#fff;color:var(--brown);box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  .eb-dday.ongoing{background:var(--orange);color:#fff;animation:pulse 2s infinite}
+  .eb-dday.done{background:rgba(255,255,255,.25);color:#fff}
+  .ebanner.ended{filter:grayscale(.85);opacity:.72}
+  /* ── 체험프로그램 카드 ── */
+  .prog-head{display:flex;align-items:center;gap:8px;margin:20px 0 4px;font-weight:800;font-size:1rem;color:var(--brown)}
+  .prog-count{background:rgba(245,130,32,.15);color:var(--orange);font-size:.74rem;font-weight:800;border-radius:99px;padding:2px 10px}
+  .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px}
+  .exp-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);position:relative;transition:.25s;display:flex;flex-direction:column;overflow:hidden}
+  .exp-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(42,33,27,.09);border-color:var(--orange)}
+  .exp-photo{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform .35s ease}
+  .exp-card:hover .exp-photo{transform:scale(1.04)}
+  .exp-body{padding:20px 22px 24px;display:flex;flex-direction:column;flex:1}
+  .exp-body h3{font-size:1.1rem;font-weight:700}
+  .exp-body p{font-size:.86rem;color:var(--ink-soft);margin-top:8px;flex:1}
+  .exp-meta{display:flex;flex-direction:column;gap:6px;margin-top:12px;padding:11px 13px;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+  .em-row{display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--ink)}
+  .em-row svg{color:var(--orange);flex:0 0 auto}
+  .em-row b{font-weight:700;color:var(--ink-soft);font-size:.76rem;margin-right:2px}
+  .exp-tba{border:1.5px dashed var(--line);border-radius:var(--radius);background:var(--paper);display:flex;align-items:center;justify-content:center;text-align:center;padding:26px 20px;color:var(--ink-soft);font-size:.88rem}
+  .swipe-hint{display:none;align-items:center;gap:6px;margin-top:10px;font-size:.78rem;color:var(--ink-soft);font-weight:500}
+  .swipe-hint svg{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+  .shuttle-box{margin-top:16px}
   .sb-event{display:flex;align-items:center;gap:12px;padding-bottom:14px;margin-bottom:16px;border-bottom:1.5px dashed var(--line)}
   .sb-event .sb-date{background:var(--brown);color:#fff;border-radius:10px;padding:7px 13px;font-weight:800;font-size:.95rem;letter-spacing:-.01em;white-space:nowrap}
   .sb-event b{font-size:1.02rem;font-weight:800;line-height:1.35}
@@ -115,6 +164,8 @@
   .tt-dir b svg{color:var(--brown)}
   .tt-times{display:flex;flex-wrap:wrap;gap:7px}
   .tt-chip{background:#fff;border:1.5px solid var(--brown);color:var(--brown);border-radius:9px;padding:5px 12px;font-size:.84rem;font-weight:800;letter-spacing:.02em}
+  .sb-more{display:inline-flex;align-items:center;gap:8px;margin-top:4px;background:var(--brown);color:#fff;font-weight:700;font-size:.88rem;border-radius:99px;padding:11px 22px;box-shadow:0 6px 16px rgba(164,75,35,.25);transition:.2s}
+  .sb-more:hover{background:var(--brown-deep);transform:translateY(-2px)}
   .sb-tba{display:flex;align-items:center;gap:10px;color:var(--ink-soft);font-size:.9rem;background:var(--paper);border:1.5px dashed var(--line);border-radius:10px;padding:16px 18px}
   .sb-tba svg{color:var(--orange);flex:0 0 auto}
 
@@ -157,6 +208,21 @@
     .guideline{padding:20px 18px}
     .guideline li{font-size:.84rem;line-height:1.55;gap:8px}
     .guideline li::before{margin-top:6px}
+    .month-tabs{gap:6px;margin:26px 0 18px}
+    .m-tab{padding:9px 2px 8px;border-radius:10px}
+    .m-tab b{font-size:1.05rem}
+    .m-tab .m-en{display:none}
+    .m-tab .m-dot{top:6px;right:6px;width:6px;height:6px}
+    .ebanner{min-height:0}
+    .eb-inner{flex-direction:column;align-items:flex-start;gap:12px;padding:20px 18px}
+    .eb-date{display:flex;align-items:baseline;gap:9px;padding:8px 14px}
+    .eb-date b{font-size:1.4rem}
+    .eb-dday{top:12px;right:12px}
+    .eb-main{padding-right:70px}
+    .exp-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-left:-18px;margin-right:-18px;padding:4px 18px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .exp-grid::-webkit-scrollbar{display:none}
+    .exp-grid .exp-card{flex:0 0 80%;max-width:320px;scroll-snap-align:center}
+    .swipe-hint{display:flex}
     .shuttle-box{padding:20px 18px}
     .hstop{font-size:.8rem;padding:7px 13px}
     .hlink{width:14px}
@@ -182,7 +248,7 @@
   </a>
   <nav class="top-nav">
     <a href="#about" data-nav><span class="ko">지구 소개</span><span class="en">About</span></a>
-    <a href="#events" data-nav><span class="ko">셔틀버스</span><span class="en">Shuttle Bus</span></a>
+    <a href="#events" data-nav><span class="ko">행사 · 셔틀버스</span><span class="en">Events &amp; Shuttle</span></a>
     <a href="#survey" data-nav><span class="ko">만족도 조사</span><span class="en">Survey</span></a>
   </nav>
   <div class="lang-toggle" role="group" aria-label="Language">
@@ -203,7 +269,7 @@
       <span class="en">MICE event schedules and complimentary shuttle bus information — everything a participant needs, all in one place.</span>
     </p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#events"><span class="ko">셔틀버스 안내</span><span class="en">Shuttle Guide</span></a>
+      <a class="btn btn-primary" href="#events"><span class="ko">행사 · 셔틀버스 보기</span><span class="en">Events &amp; Shuttle</span></a>
       <a class="btn btn-ghost" href="#about"><span class="ko">지구 소개</span><span class="en">About the District</span></a>
     </div>
   </div>
@@ -245,11 +311,11 @@
 <!-- ═══════════ 월별 행사 & 셔틀버스 ═══════════ -->
 <section id="events">
   <div class="wrap">
-    <span class="eyebrow">Shuttle Bus Guide</span>
-    <h2 class="sec-title"><span class="ko">셔틀버스 안내</span><span class="en">Shuttle Bus Guide</span></h2>
+    <span class="eyebrow">Monthly Events</span>
+    <h2 class="sec-title"><span class="ko">월별 행사 안내</span><span class="en">Monthly Events</span></h2>
     <p class="sec-desc">
-      <span class="ko">MICE 행사 기간에 운행되는 무료 셔틀버스 안내입니다. 운행 노선과 시간은 행사별로 다릅니다.</span>
-      <span class="en">Complimentary shuttle buses run during MICE events. Routes and schedules vary by event.</span>
+      <span class="ko">월을 선택하면 해당 월의 MICE 행사와 함께 운영되는 체험 프로그램과 셔틀버스를 확인할 수 있습니다.</span>
+      <span class="en">Select a month to see its MICE events with their experience programs and shuttle buses.</span>
     </p>
 
     <div class="guideline">
@@ -265,11 +331,12 @@
       </ul>
     </div>
 
-    <div id="shuttleList" style="margin-top:28px"></div>
+    <div class="month-tabs" role="tablist" aria-label="월 선택" id="monthTabs"></div>
+    <div id="monthPanel"></div>
 
     <p class="event-note">
-      <span class="ko">※ 행사 일정 및 셔틀버스 운행은 주최 측 사정에 따라 변경될 수 있습니다.</span>
-      <span class="en">※ Event schedules and shuttle operations are subject to change.</span>
+      <span class="ko">※ 행사 일정, 체험 프로그램 및 셔틀버스 운행은 주최 측 사정에 따라 변경될 수 있습니다.</span>
+      <span class="en">※ Event schedules, programs and shuttle operations are subject to change.</span>
     </p>
   </div>
 </section>
@@ -326,7 +393,7 @@
   </a>
   <a href="#events" data-nav>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-    <span class="ko">셔틀버스</span><span class="en">Shuttle</span>
+    <span class="ko">행사·셔틀</span><span class="en">Events</span>
   </a>
   <a href="#survey" data-nav>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -334,6 +401,7 @@
   </a>
 </nav>
 
+<script src="events-data.js"></script>
 <script>
 // ── 로드 시 항상 최상단에서 시작 (해시 제거 포함) ──────
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -350,45 +418,31 @@ const VIDEO = {
   en: ""    // ▼ 영문 홍보영상(30초)
 };
 
-// ── 행사 & 셔틀버스 데이터 ─────────────────────────
-// shuttle: null이면 "추후 공지"로 표시됩니다.
-const EVENTS = [
-  {ko:"제4회 지속가능한 마이스·관광 울산포럼", en:"4th Sustainable MICE & Tourism Ulsan Forum",
-   s:"2026-07-15", e:"2026-07-15", vko:"유에코", ven:"UECO", month:7, poster:"images/banner-ban.jpg",
-   shuttle:null},
-  {ko:"한국지방정부학회 하계학술대회", en:"KALGS Summer Conference",
-   s:"2026-08-28", e:"2026-08-28", vko:"유에코", ven:"UECO", month:8, poster:"images/banner-hya.jpg",
-   shuttle:{
-     stops:[{ko:"울산역 (KTX)",en:"KTX Ulsan Station"},{ko:"UECO",en:"UECO",hub:true}],
-     hoursKo:"오전 11:30 ~ 오후 8:20 (행사 기간 중)", hoursEn:"11:30 AM – 8:20 PM (during the event)",
-     table:[
-       {dko:"울산역(KTX) → UECO", den:"Ulsan Stn (KTX) → UECO", t:["11:30","11:50","12:10","12:30","12:50"]},
-       {dko:"UECO → 울산역(KTX)", den:"UECO → Ulsan Stn (KTX)", t:["18:20","18:40","20:00","20:20"]}
-     ]
-   }},
-  {ko:"2026 울산세계미래산업박람회", en:"2026 Ulsan World Future Industry Expo",
-   s:"2026-09-10", e:"2026-09-12", vko:"유에코", ven:"UECO", month:9, poster:"images/banner-tre.jpg",
-   shuttle:null},
-  {ko:"제11회 울산울주세계산악영화제", en:"11th Ulsan Ulju Mountain Film Festival",
-   s:"2026-09-18", e:"2026-09-22", vko:"영남알프스 복합웰컴센터", ven:"Yeongnam Alps Welcome Center", month:9, poster:"images/banner-bok.jpg",
-   shuttle:null},
-  {ko:"울산 인사이트 포럼", en:"Ulsan Insight Forum",
-   s:"2026-10-31", e:"2026-10-31", vko:"유에코", ven:"UECO", month:10, poster:"images/banner-cen.jpg",
-   shuttle:null},
-  {ko:"한국해양학회 추계학술대회", en:"KSO Fall Conference",
-   s:"2026-11-18", e:"2026-11-20", vko:"유에코", ven:"UECO", month:11, poster:"images/banner-ban.jpg",
-   shuttle:null}
-];
+const PROGRAM_INFO = {
+  trevier: {ko:"트레비어", en:"Trevier Brewery",
+    dko:"수제맥주 양조장 견학 및 트레비어 맥주 시음", den:"Craft brewery tour & beer tasting", img:"images/exp-trevier.jpg"},
+  bangucheon: {ko:"반구천의 암각화", en:"Bangucheon Petroglyphs",
+    dko:"유네스코 세계유산 반구천의 암각화·천전리 각석 투어", den:"Guided tour of the UNESCO-listed petroglyphs", img:"images/exp-bangucheon.jpg"},
+  boksoon: {ko:"복순도가", en:"Boksoon Doga",
+    dko:"전통 방식 막걸리 빚기 및 복순도가 막걸리 시음", den:"Traditional makgeolli brewing & tasting", img:"images/exp-boksoon.jpg"},
+  hyanggyo: {ko:"언양향교", en:"Eonyang Hyanggyo",
+    dko:"조선시대 향교에서 즐기는 전통문화·세시풍속 체험", den:"Traditional culture at a Joseon-era academy", img:"images/exp-hyanggyo.jpg"},
+  center: {ko:"울산관광기업지원센터", en:"Tourism Business Support Center",
+    dko:"울산 MICE 얼라이언스 연계 체험 프로그램", den:"Programs with the Ulsan MICE Alliance", img:"images/exp-center.jpg"}
+};
+
+// EVENTS 데이터는 events-data.js에서 로드됩니다 (index.html·shuttle.html 공용)
 
 const MONTHS = [7,8,9,10,11];
 const DOW_KO = ["일","월","화","수","목","금","토"];
 function fmtKo(d){ const t=new Date(d+"T00:00:00"); return `${t.getMonth()+1}. ${t.getDate()}.(${DOW_KO[t.getDay()]})`; }
 function fmtEn(d){ return new Date(d+"T00:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
 
-function shuttleBlock(sh){
+function shuttleBlock(ev){
+  const sh = ev.shuttle;
+  const head = `<div class="prog-head" style="margin:0 0 12px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6v6M16 6v6M2 12h19.6M4 6h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM7 21l1-3M17 21l-1-3"/></svg><span class="ko">셔틀버스</span><span class="en">Shuttle Bus</span></div>`;
   if(!sh){
-    return `<div class="shuttle-box">
-      <div class="sb-head"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6v6M16 6v6M2 12h19.6M4 6h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM7 21l1-3M17 21l-1-3"/></svg><span class="ko">셔틀버스</span><span class="en">Shuttle Bus</span></div>
+    return `<div class="shuttle-box">${head}
       <div class="sb-tba">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
         <span><span class="ko">셔틀버스 운행 정보는 추후 공지됩니다.</span><span class="en">Shuttle bus information will be announced soon.</span></span>
@@ -399,46 +453,117 @@ function shuttleBlock(sh){
     (i?'<span class="hlink" aria-hidden="true"></span>':'') +
     `<span class="hstop${s.hub?" hub":""}"><span class="ko">${s.ko}</span><span class="en">${s.en}</span></span>`
   ).join("");
-  const table = sh.table.map(d=>`<div class="tt-dir">
-      <b><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="ko">${d.dko}</span><span class="en">${d.den}</span></b>
-      <div class="tt-times">${d.t.map(t=>`<span class="tt-chip">${t}</span>`).join("")}</div>
-    </div>`).join("");
-  return `<div class="shuttle-box">
+  return `<div class="shuttle-box">${head}
     <div class="roundtrip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg><span class="ko">왕복 운행</span><span class="en">Round-trip service</span></div>
     <div class="hflow">${flow}</div>
     <div class="sb-hours"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
       <span class="ko">운행시간 : ${sh.hoursKo}</span><span class="en">Hours: ${sh.hoursEn}</span></div>
-    ${table}
+    <a class="sb-more" href="shuttle.html?event=${ev.id}">
+      <span class="ko">셔틀버스 노선 안내 · 시간표 보기</span><span class="en">Route &amp; Timetable</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>`;
 }
 
-function renderShuttles(){
-  const box = document.getElementById("shuttleList");
-  const sorted = [...EVENTS].sort((a,b)=>a.s.localeCompare(b.s));
-  const withShuttle = sorted.filter(e=>e.shuttle);
-  const tba = sorted.filter(e=>!e.shuttle);
-  let out = withShuttle.map(ev=>{
-    const dateKo = ev.s===ev.e ? fmtKo(ev.s) : `${fmtKo(ev.s)} ~ ${fmtKo(ev.e)}`;
-    const dateEn = ev.s===ev.e ? fmtEn(ev.s) : `${fmtEn(ev.s)} – ${fmtEn(ev.e)}`;
-    const inner = shuttleBlock(ev.shuttle).replace('<div class="shuttle-box">',
-      `<div class="shuttle-box"><div class="sb-event">
-        <span class="sb-date">${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</span>
-        <span><b><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></b>
-        <span class="sb-venue"><span class="ko">${dateKo} · ${ev.vko}</span><span class="en">${dateEn} · ${ev.ven}</span></span></span>
-      </div>`);
-    return inner;
-  }).join("");
-  if(tba.length){
-    const namesKo = tba.map(e=>e.ko).join(", ");
-    const namesEn = tba.map(e=>e.en).join(", ");
-    out += `<div class="sb-tba" style="margin-top:6px">
+function statusOf(ev, today){
+  const s=new Date(ev.s+"T00:00:00"), e=new Date(ev.e+"T00:00:00");
+  if(today>e) return {cls:"done", ko:"종료", en:"Ended"};
+  if(today>=s) return {cls:"ongoing", ko:"진행중", en:"Now On"};
+  const dd=Math.round((s-today)/86400000);
+  const t=dd===0?"D-DAY":"D-"+dd;
+  return {cls:"upcoming", ko:t, en:t};
+}
+
+function programsBlock(ev){
+  let cards = "";
+  const n = ev.programs ? ev.programs.length : 0;
+  if(ev.programs){
+    cards = ev.programs.map(p=>{
+      const info = PROGRAM_INFO[p.id];
+      return `<article class="exp-card">
+        <img class="exp-photo" src="${info.img}" alt="${info.ko}" loading="lazy">
+        <div class="exp-body">
+          <h3><span class="ko">${info.ko}</span><span class="en">${info.en}</span></h3>
+          <p><span class="ko">${info.dko}</span><span class="en">${info.den}</span></p>
+          <div class="exp-meta">
+            <span class="em-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><b><span class="ko">운영일</span><span class="en">Dates</span></b><span class="ko">${p.days}</span><span class="en">${p.daysEn}</span></span>
+            <span class="em-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><b><span class="ko">운영시간</span><span class="en">Hours</span></b><span class="ko">${p.time}</span><span class="en">${p.timeEn}</span></span>
+          </div>
+        </div>
+      </article>`;
+    }).join("");
+    if(ev.moreComing){
+      cards += `<div class="exp-tba"><span><span class="ko">체험프로그램이 추가될 예정입니다.<br>확정되는 대로 안내드리겠습니다.</span><span class="en">More programs will be added soon.</span></span></div>`;
+    }
+  }
+  const head = `<div class="prog-head">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6L7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg>
+      <span class="ko">체험프로그램</span><span class="en">Experience Programs</span>${n?`<span class="prog-count">${n}</span>`:""}
+    </div>`;
+  if(!ev.programs){
+    return head + `<div class="sb-tba" style="margin-top:10px">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <span><span class="ko">그 외 행사(${namesKo})의 셔틀버스 운행 정보는 확정되는 대로 안내됩니다.</span><span class="en">Shuttle information for other events (${namesEn}) will be announced once confirmed.</span></span>
+      <span><span class="ko">체험프로그램 정보는 추후 공지됩니다.</span><span class="en">Program information will be announced soon.</span></span>
     </div>`;
   }
-  box.innerHTML = out;
+  return head + `<div class="swipe-hint" aria-hidden="true">
+      <span class="ko">옆으로 넘겨서 더 보기</span><span class="en">Swipe to see more</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div><div class="exp-grid">${cards}</div>`;
 }
-renderShuttles();
+
+function renderMonth(month){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const evs = EVENTS.filter(e=>e.month===month);
+  const panel = document.getElementById("monthPanel");
+  if(!evs.length){
+    panel.innerHTML = `<div class="month-empty"><span class="ko">이 달에는 예정된 행사가 없습니다.</span><span class="en">No events scheduled this month.</span></div>`;
+    return;
+  }
+  panel.innerHTML = evs.map(ev=>{
+    const st = statusOf(ev, today);
+    const dateKo = ev.s===ev.e ? fmtKo(ev.s) : `${fmtKo(ev.s)} ~ ${fmtKo(ev.e)}`;
+    const dateEn = ev.s===ev.e ? fmtEn(ev.s) : `${fmtEn(ev.s)} – ${fmtEn(ev.e)}`;
+    return `<div class="month-event">
+      <div class="ebanner${st.cls==="done"?" ended":""}">
+        <img class="eb-photo" src="${ev.poster}" alt="" loading="lazy">
+        <span class="eb-dday ${st.cls}"><span class="ko">${st.ko}</span><span class="en">${st.en}</span></span>
+        <div class="eb-inner">
+          <div class="eb-date"><b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
+            <span class="ko">${dateKo}</span><span class="en">${dateEn}</span></div>
+          <div class="eb-main">
+            <h3><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></h3>
+            <span class="eb-venue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">${ev.vko}</span><span class="en">${ev.ven}</span></span>
+          </div>
+        </div>
+      </div>
+      ${programsBlock(ev)}
+      ${shuttleBlock(ev)}
+    </div>`;
+  }).join("");
+}
+
+function initMonthTabs(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const bar = document.getElementById("monthTabs");
+  let cur = today.getFullYear()===2026 ? today.getMonth()+1 : 7;
+  if(!MONTHS.includes(cur)) cur = cur<7 ? 7 : 11;
+  bar.innerHTML = MONTHS.map(m=>{
+    const has = EVENTS.some(e=>e.month===m);
+    const past = has && EVENTS.filter(e=>e.month===m).every(e=>new Date(e.e+"T00:00:00")<today);
+    return `<button class="m-tab${m===cur?" on":""}${past?" past":""}" role="tab" aria-selected="${m===cur}" data-month="${m}">
+      <b>${m}<small>월</small></b><span class="m-en">${["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m]}</span>
+      ${has?`<i class="m-dot"></i>`:""}
+    </button>`;
+  }).join("");
+  bar.querySelectorAll(".m-tab").forEach(t=>t.addEventListener("click",()=>{
+    bar.querySelectorAll(".m-tab").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-selected","false");});
+    t.classList.add("on"); t.setAttribute("aria-selected","true");
+    renderMonth(+t.dataset.month);
+  }));
+  renderMonth(cur);
+}
+initMonthTabs();
 
 
 // ── 홍보영상 삽입 ───────────────────────────────
