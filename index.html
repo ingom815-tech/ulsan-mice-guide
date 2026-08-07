@@ -18,6 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
   :root{
     --brown:#A44B23; --brown-deep:#7E3617;
@@ -174,6 +176,14 @@
   .tt-dir b svg{color:var(--brown)}
   .tt-times{display:flex;flex-wrap:wrap;gap:7px}
   .tt-chip{background:#fff;border:1.5px solid var(--brown);color:var(--brown);border-radius:9px;padding:5px 12px;font-size:.84rem;font-weight:800;letter-spacing:.02em}
+  .sb-map{width:100%;height:250px;border-radius:12px;border:1px solid var(--line);margin-top:2px;z-index:1;position:relative}
+  .sb-map.osm-muted .leaflet-tile{filter:grayscale(.75) saturate(.6) brightness(1.06) contrast(.92)}
+  .mkr{width:30px;height:30px;border-radius:50%;background:var(--orange);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(42,33,27,.35)}
+  .mkr svg{width:16px;height:16px}
+  .mkr-hub{width:36px;height:36px;background:var(--brown);border-width:3px;box-shadow:0 0 0 5px rgba(164,75,35,.18),0 4px 12px rgba(42,33,27,.4)}
+  .mkr-hub svg{width:19px;height:19px}
+  .map-label{background:#fff;border:1.5px solid var(--brown);border-radius:99px;padding:3px 11px;font-family:'Noto Sans KR',sans-serif;font-size:.74rem;font-weight:700;color:var(--ink);box-shadow:0 2px 8px rgba(42,33,27,.18);white-space:nowrap}
+  .map-label.hub{background:var(--brown);color:#fff;border-color:var(--brown)}
   .sb-headrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
   .sb-row{display:flex;align-items:center;gap:16px;padding:13px 0;border-bottom:1px dashed var(--line)}
   .sb-row:last-of-type{border-bottom:none}
@@ -247,7 +257,15 @@
     .ev-cols{grid-template-columns:1fr;gap:12px}
     .acc-chev{bottom:12px;right:12px;width:30px;height:30px}
     .sb-row{flex-direction:column;align-items:flex-start;gap:8px;padding:11px 0}
-    .sb-headrow{flex-wrap:wrap}
+    .sb-map{width:100%;height:250px;border-radius:12px;border:1px solid var(--line);margin-top:2px;z-index:1;position:relative}
+  .sb-map.osm-muted .leaflet-tile{filter:grayscale(.75) saturate(.6) brightness(1.06) contrast(.92)}
+  .mkr{width:30px;height:30px;border-radius:50%;background:var(--orange);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(42,33,27,.35)}
+  .mkr svg{width:16px;height:16px}
+  .mkr-hub{width:36px;height:36px;background:var(--brown);border-width:3px;box-shadow:0 0 0 5px rgba(164,75,35,.18),0 4px 12px rgba(42,33,27,.4)}
+  .mkr-hub svg{width:19px;height:19px}
+  .map-label{background:#fff;border:1.5px solid var(--brown);border-radius:99px;padding:3px 11px;font-family:'Noto Sans KR',sans-serif;font-size:.74rem;font-weight:700;color:var(--ink);box-shadow:0 2px 8px rgba(42,33,27,.18);white-space:nowrap}
+  .map-label.hub{background:var(--brown);color:#fff;border-color:var(--brown)}
+  .sb-headrow{flex-wrap:wrap}
     .shuttle-box{padding:20px 18px}
     .hstop{font-size:.8rem;padding:7px 13px}
     .hlink{width:14px}
@@ -463,6 +481,58 @@ const DOW_KO = ["일","월","화","수","목","금","토"];
 function fmtKo(d){ const t=new Date(d+"T00:00:00"); return `${t.getMonth()+1}. ${t.getDate()}.(${DOW_KO[t.getDay()]})`; }
 function fmtEn(d){ return new Date(d+"T00:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
 
+
+// ── 셔틀 노선 지도 (Leaflet · CARTO + OSM 폴백) ─────────
+const SHUTTLE_MAPS = {};
+const MKR_SVG = {
+  hub:  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>',
+  train:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l2-4M16 21l-2-4"/></svg>'
+};
+function mapBase(m){
+  let errs = 0, fell = false;
+  const carto = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+    {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>', maxZoom:19, subdomains:"abcd"});
+  carto.on("tileerror", ()=>{
+    if(++errs >= 3 && !fell){
+      fell = true; m.removeLayer(carto);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom:19}).addTo(m);
+      m.getContainer().classList.add("osm-muted");
+    }
+  });
+  carto.addTo(m);
+}
+function initShuttleMap(ev){
+  if(typeof L === "undefined" || !ev || !ev.shuttle) return;
+  const el = document.querySelector(`[data-map="${ev.id}"]`);
+  if(!el || el.dataset.init || el.getBoundingClientRect().width === 0) return;
+  el.dataset.init = "1";
+  const m = L.map(el, {scrollWheelZoom:false});
+  mapBase(m);
+  const pts = [];
+  ev.shuttle.stops.forEach(s=>{
+    pts.push(s.c);
+    const size = s.hub ? 36 : 30;
+    const icon = L.divIcon({className:"", html:`<div class="mkr${s.hub?" mkr-hub":""}">${MKR_SVG[s.icon]||MKR_SVG.train}</div>`, iconSize:[size,size], iconAnchor:[size/2,size/2]});
+    const dir = s.dir || "top";
+    const off = dir==="bottom" ? [0,18] : dir==="left" ? [-18,0] : dir==="right" ? [18,0] : [0,-18];
+    L.marker(s.c, {icon}).addTo(m)
+      .bindTooltip(`<span class="map-label${s.hub?" hub":""}"><span class="ko">${s.ko}</span><span class="en">${s.en}</span></span>`,
+        {permanent:true, direction:dir, offset:off, className:"map-tt"});
+  });
+  L.polyline(pts, {color:"#A44B23", weight:3.5, opacity:.85}).addTo(m);
+  const b = L.latLngBounds(pts).pad(0.35);
+  m.fitBounds(b); m.__b = b;
+  SHUTTLE_MAPS[ev.id] = m;
+}
+function refitShuttleMap(id){
+  const m = SHUTTLE_MAPS[id]; if(!m) return;
+  setTimeout(()=>{ m.invalidateSize(); if(m.__b) m.fitBounds(m.__b); }, 80);
+}
+const mapTT = document.createElement("style");
+mapTT.textContent = ".map-tt{background:transparent;border:none;box-shadow:none;padding:0}.map-tt::before{display:none}";
+document.head.appendChild(mapTT);
+
 function shuttleBlock(ev){
   const sh = ev.shuttle;
   const head = `<div class="prog-head" style="margin:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6v6M16 6v6M2 12h19.6M4 6h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM7 21l1-3M17 21l-1-3"/></svg><span class="ko">셔틀버스</span><span class="en">Shuttle Bus</span></div>`;
@@ -494,6 +564,7 @@ function shuttleBlock(ev){
       <span class="sb-label"><span class="ko">운행시간</span><span class="en">Hours</span></span>
       <div class="sb-val"><span class="ko">${sh.hoursKo}</span><span class="en">${sh.hoursEn}</span></div>
     </div>
+    <div class="sb-map" data-map="${ev.id}" aria-label="노선 지도"></div>
     <button class="sb-toggle" type="button" aria-expanded="false">
       <span class="ko">셔틀버스 시간표 보기</span><span class="en">View Timetable</span>
       <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -587,6 +658,8 @@ function renderMonth(month){
       </div>
     </div>`;
   }).join("");
+  Object.keys(SHUTTLE_MAPS).forEach(k=>delete SHUTTLE_MAPS[k]);
+  evs.filter(e=>e.shuttle).forEach(e=>initShuttleMap(e));
 }
 
 function initMonthTabs(){
@@ -631,6 +704,13 @@ monthPanelEl.addEventListener("click", e=>{
     body.hidden = !open;
     item.classList.toggle("open", open);
     head.setAttribute("aria-expanded", open);
+    if(open){
+      const mp = body.querySelector("[data-map]");
+      if(mp){
+        const mev = EVENTS.find(x=>x.id===mp.dataset.map);
+        if(!mp.dataset.init) initShuttleMap(mev); else refitShuttleMap(mp.dataset.map);
+      }
+    }
   }
 });
 monthPanelEl.addEventListener("keydown", e=>{
