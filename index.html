@@ -111,6 +111,13 @@
   .m-tab.on .m-dot{background:#fff}
   .m-tab.past:not(.on){opacity:.5}
   .month-empty{background:#fff;border:1.5px dashed var(--line);border-radius:var(--radius);padding:44px 20px;text-align:center;color:var(--ink-soft)}
+  .ev-tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-bottom:14px}
+  .ev-tab{display:flex;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:11px 15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:.2s;min-width:0}
+  .ev-tab b{font-size:1rem;font-weight:800;letter-spacing:-.01em;flex:0 0 auto}
+  .ev-tab span{font-size:.82rem;font-weight:600;line-height:1.3;min-width:0}
+  .ev-tab:hover{border-color:var(--orange)}
+  .ev-tab.on{border-color:var(--brown);background:var(--brown);color:#fff;box-shadow:0 8px 20px rgba(164,75,35,.25)}
+  .month-event{animation:fadein .3s ease}
   /* ── 행사 배너 ── */
   .ebanner{position:relative;border-radius:var(--radius);overflow:hidden;color:#fff;background:linear-gradient(108deg,#6E2F12 0%,#A44B23 46%,#C4611E 100%);box-shadow:0 14px 34px rgba(126,54,23,.28);min-height:168px;display:flex;align-items:stretch}
   .eb-photo{position:absolute;right:0;top:0;bottom:0;width:100%;object-fit:cover;object-position:center 30%}
@@ -126,16 +133,8 @@
   .eb-dday.ongoing{background:var(--orange);color:#fff;animation:pulse 2s infinite}
   .eb-dday.done{background:rgba(255,255,255,.25);color:#fff}
   .ebanner.ended{filter:grayscale(.85);opacity:.72}
-  .acc-head{cursor:pointer}
-  .acc-head:hover .eb-photo{opacity:.92}
-  .acc-chev{position:absolute;bottom:14px;right:16px;z-index:3;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--brown);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.22);transition:transform .25s ease}
-  .month-event.open .acc-chev{transform:rotate(180deg)}
-  .acc-body[hidden]{display:none}
-  .acc-body{animation:fadein .25s ease}
   .ev-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;margin-top:14px}
   .ev-col .prog-head{margin-top:0}
-  .month-event{margin-bottom:14px}
-  .month-event.open{margin-bottom:30px}
   /* ── 체험프로그램 카드 ── */
   .prog-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;height:100%}
   .exp-row{display:flex;gap:15px;align-items:flex-start;padding:15px 0;border-bottom:1px dashed var(--line)}
@@ -244,9 +243,11 @@
     .eb-date b{font-size:1.4rem}
     .eb-dday{top:12px;right:12px}
     .eb-main{padding-right:70px}
-    .acc-head .eb-inner{padding-bottom:30px}
+    .ev-tabs{gap:6px}
+    .ev-tab{flex-direction:column;align-items:flex-start;gap:2px;padding:9px 12px}
+    .ev-tab b{font-size:.9rem}
+    .ev-tab span{font-size:.72rem}
     .ev-cols{grid-template-columns:1fr;gap:12px}
-    .acc-chev{bottom:12px;right:12px;width:30px;height:30px}
     .prog-box{padding:20px 18px}
     .exp-thumb{flex-basis:78px;width:78px;height:78px}
     .sb-row{flex-direction:column;align-items:flex-start;gap:8px;padding:11px 0}
@@ -628,43 +629,52 @@ function programsBlock(ev){
   return `<div class="prog-box">${head}${rows}</div>`;
 }
 
-function renderMonth(month){
+function renderEventDetail(ev){
   const today=new Date(); today.setHours(0,0,0,0);
+  const st = statusOf(ev, today);
+  const dateKo = ev.s===ev.e ? fmtKo(ev.s) : `${fmtKo(ev.s)} ~ ${fmtKo(ev.e)}`;
+  const dateEn = ev.s===ev.e ? fmtEn(ev.s) : `${fmtEn(ev.s)} – ${fmtEn(ev.e)}`;
+  document.getElementById("evDetail").innerHTML = `<div class="month-event open">
+    <div class="ebanner${st.cls==="done"?" ended":""}">
+      <img class="eb-photo" src="${ev.poster}" alt="" loading="lazy">
+      <span class="eb-dday ${st.cls}"><span class="ko">${st.ko}</span><span class="en">${st.en}</span></span>
+      <div class="eb-inner">
+        <div class="eb-date"><b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
+          <span class="ko">${dateKo}</span><span class="en">${dateEn}</span></div>
+        <div class="eb-main">
+          <h3><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></h3>
+          <span class="eb-venue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">${ev.vko}</span><span class="en">${ev.ven}</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="ev-cols">
+      <div class="ev-col">${programsBlock(ev)}</div>
+      <div class="ev-col">${shuttleBlock(ev)}</div>
+    </div>
+  </div>`;
+  Object.keys(SHUTTLE_MAPS).forEach(k=>delete SHUTTLE_MAPS[k]);
+  if(ev.shuttle) initShuttleMap(ev);
+}
+
+function renderMonth(month){
   const evs = EVENTS.filter(e=>e.month===month);
   const panel = document.getElementById("monthPanel");
   if(!evs.length){
     panel.innerHTML = `<div class="month-empty"><span class="ko">이 달에는 예정된 행사가 없습니다.</span><span class="en">No events scheduled this month.</span></div>`;
     return;
   }
-  panel.innerHTML = evs.map((ev,idx)=>{
-    const st = statusOf(ev, today);
-    const dateKo = ev.s===ev.e ? fmtKo(ev.s) : `${fmtKo(ev.s)} ~ ${fmtKo(ev.e)}`;
-    const dateEn = ev.s===ev.e ? fmtEn(ev.s) : `${fmtEn(ev.s)} – ${fmtEn(ev.e)}`;
-    const open = idx===0;
-    return `<div class="month-event${open?" open":""}">
-      <div class="ebanner acc-head${st.cls==="done"?" ended":""}" role="button" tabindex="0" aria-expanded="${open}">
-        <img class="eb-photo" src="${ev.poster}" alt="" loading="lazy">
-        <span class="eb-dday ${st.cls}"><span class="ko">${st.ko}</span><span class="en">${st.en}</span></span>
-        <div class="eb-inner">
-          <div class="eb-date"><b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
-            <span class="ko">${dateKo}</span><span class="en">${dateEn}</span></div>
-          <div class="eb-main">
-            <h3><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></h3>
-            <span class="eb-venue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">${ev.vko}</span><span class="en">${ev.ven}</span></span>
-          </div>
-        </div>
-        <span class="acc-chev" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
-      </div>
-      <div class="acc-body"${open?"":" hidden"}>
-        <div class="ev-cols">
-          <div class="ev-col">${programsBlock(ev)}</div>
-          <div class="ev-col">${shuttleBlock(ev)}</div>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-  Object.keys(SHUTTLE_MAPS).forEach(k=>delete SHUTTLE_MAPS[k]);
-  evs.filter(e=>e.shuttle).forEach(e=>initShuttleMap(e));
+  const tabs = evs.length > 1 ? `<div class="ev-tabs" role="tablist">` + evs.map((ev,i)=>
+    `<button class="ev-tab${i===0?" on":""}" role="tab" aria-selected="${i===0}" data-ev="${ev.id}">
+      <b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
+      <span><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></span>
+    </button>`).join("") + `</div>` : "";
+  panel.innerHTML = tabs + `<div id="evDetail"></div>`;
+  panel.querySelectorAll(".ev-tab").forEach(t=>t.addEventListener("click",()=>{
+    panel.querySelectorAll(".ev-tab").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-selected","false");});
+    t.classList.add("on"); t.setAttribute("aria-selected","true");
+    renderEventDetail(EVENTS.find(e=>e.id===t.dataset.ev));
+  }));
+  renderEventDetail(evs[0]);
 }
 
 function initMonthTabs(){
@@ -700,27 +710,6 @@ monthPanelEl.addEventListener("click", e=>{
     btn.setAttribute("aria-expanded", open);
     btn.classList.toggle("open", open);
     return;
-  }
-  const head = e.target.closest(".acc-head");
-  if(head){
-    const item = head.closest(".month-event");
-    const body = item.querySelector(".acc-body");
-    const open = body.hidden;
-    body.hidden = !open;
-    item.classList.toggle("open", open);
-    head.setAttribute("aria-expanded", open);
-    if(open){
-      const mp = body.querySelector("[data-map]");
-      if(mp){
-        const mev = EVENTS.find(x=>x.id===mp.dataset.map);
-        if(!mp.dataset.init) initShuttleMap(mev); else refitShuttleMap(mp.dataset.map);
-      }
-    }
-  }
-});
-monthPanelEl.addEventListener("keydown", e=>{
-  if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("acc-head")){
-    e.preventDefault(); e.target.click();
   }
 });
 
