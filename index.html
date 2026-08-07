@@ -112,14 +112,20 @@
   .m-tab.past:not(.on){opacity:.5}
   .month-empty{background:#fff;border:1.5px dashed var(--line);border-radius:var(--radius);padding:44px 20px;text-align:center;color:var(--ink-soft)}
   .month-event{animation:fadein .3s ease}
-  .ev-tabs{display:flex;gap:8px;margin-bottom:14px}
-  .ev-tab{flex:1;min-width:0;display:flex;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 16px;cursor:pointer;font-family:inherit;color:var(--ink);transition:flex .35s ease,background .2s,border-color .2s,box-shadow .2s}
-  .ev-tab b{font-size:1rem;font-weight:800;letter-spacing:-.01em;flex:0 0 auto}
-  .ev-tab>span{font-size:.84rem;font-weight:600;line-height:1.3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .ev-tab:hover{border-color:var(--orange)}
-  .ev-tab.on{flex:2.4;border-color:var(--brown);background:var(--brown);color:#fff;box-shadow:0 8px 20px rgba(164,75,35,.25)}
-  .ev-tab.on>span{white-space:normal;overflow:visible}
   /* ── 행사 배너 ── */
+  .ev-banners{display:flex;gap:12px;margin-bottom:14px}
+  .ev-banners .ebanner{flex:1;min-width:0}
+  .ev-banners.multi .ebanner{cursor:pointer;transition:flex .4s ease,box-shadow .25s,filter .25s}
+  .ev-banners.multi .ebanner.on{flex:2.6}
+  .ev-banners.multi .ebanner:not(.on){filter:saturate(.75) brightness(.92)}
+  .ev-banners.multi .ebanner:not(.on):hover{filter:none;box-shadow:0 10px 26px rgba(126,54,23,.3)}
+  .ev-banners.multi .ebanner:not(.on) .eb-date span{display:none}
+  .ev-banners.multi .ebanner:not(.on) .eb-date{padding:9px 13px}
+  .ev-banners.multi .ebanner:not(.on) .eb-venue{display:none}
+  .ev-banners.multi .ebanner:not(.on) .eb-inner{gap:13px;padding:18px}
+  .ev-banners.multi .ebanner:not(.on) .eb-main h3{font-size:.95rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .ev-banners.multi .ebanner:not(.on) .eb-dday{top:10px;right:10px;padding:4px 11px;font-size:.7rem}
+
   .ebanner{position:relative;border-radius:var(--radius);overflow:hidden;color:#fff;background:linear-gradient(108deg,#6E2F12 0%,#A44B23 46%,#C4611E 100%);box-shadow:0 14px 34px rgba(126,54,23,.28);min-height:168px;display:flex;align-items:stretch}
   .eb-photo{position:absolute;right:0;top:0;bottom:0;width:100%;object-fit:cover;object-position:center 30%}
   .ebanner::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(50,22,8,.82) 0%,rgba(50,22,8,.45) 55%,rgba(50,22,8,.12) 100%)}
@@ -239,11 +245,11 @@
     .eb-date b{font-size:1.4rem}
     .eb-dday{top:12px;right:12px}
     .eb-main{padding-right:70px}
-    .ev-tabs{gap:6px}
-    .ev-tab{padding:10px 12px;gap:8px}
-    .ev-tab b{font-size:.88rem}
-    .ev-tab>span{font-size:.72rem}
-    .ev-tab.on{flex:2.8}
+    .ev-banners{flex-direction:column;gap:8px}
+    .ev-banners.multi .ebanner:not(.on){min-height:0}
+    .ev-banners.multi .ebanner:not(.on) .eb-inner{flex-direction:row;align-items:center;gap:10px;padding:12px 14px 12px 14px}
+    .ev-banners.multi .ebanner:not(.on) .eb-main{padding-right:60px}
+    .ev-banners.multi .ebanner:not(.on) .eb-main h3{-webkit-line-clamp:1;font-size:.88rem}
     .ev-cols{grid-template-columns:1fr;gap:12px}
     .prog-box{padding:20px 18px}
     .exp-thumb{flex-basis:78px;width:78px;height:78px}
@@ -626,28 +632,29 @@ function programsBlock(ev){
   return `<div class="prog-box">${head}${rows}</div>`;
 }
 
-function renderEventDetail(ev){
+function bannerHTML(ev, on, clickable){
   const today=new Date(); today.setHours(0,0,0,0);
   const st = statusOf(ev, today);
   const dateKo = ev.s===ev.e ? fmtKo(ev.s) : `${fmtKo(ev.s)} ~ ${fmtKo(ev.e)}`;
   const dateEn = ev.s===ev.e ? fmtEn(ev.s) : `${fmtEn(ev.s)} – ${fmtEn(ev.e)}`;
-  document.getElementById("evDetail").innerHTML = `<div class="month-event open">
-    <div class="ebanner${st.cls==="done"?" ended":""}">
-      <img class="eb-photo" src="${ev.poster}" alt="" loading="lazy">
-      <span class="eb-dday ${st.cls}"><span class="ko">${st.ko}</span><span class="en">${st.en}</span></span>
-      <div class="eb-inner">
-        <div class="eb-date"><b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
-          <span class="ko">${dateKo}</span><span class="en">${dateEn}</span></div>
-        <div class="eb-main">
-          <h3><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></h3>
-          <span class="eb-venue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">${ev.vko}</span><span class="en">${ev.ven}</span></span>
-        </div>
+  return `<div class="ebanner${on?" on":""}${st.cls==="done"?" ended":""}${clickable?" sel":""}" data-ev="${ev.id}"${clickable?' role="tab" tabindex="0" aria-selected="'+on+'"':''}>
+    <img class="eb-photo" src="${ev.poster}" alt="" loading="lazy">
+    <span class="eb-dday ${st.cls}"><span class="ko">${st.ko}</span><span class="en">${st.en}</span></span>
+    <div class="eb-inner">
+      <div class="eb-date"><b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
+        <span class="ko">${dateKo}</span><span class="en">${dateEn}</span></div>
+      <div class="eb-main">
+        <h3><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></h3>
+        <span class="eb-venue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">${ev.vko}</span><span class="en">${ev.ven}</span></span>
       </div>
     </div>
-    <div class="ev-cols">
-      <div class="ev-col">${programsBlock(ev)}</div>
-      <div class="ev-col">${shuttleBlock(ev)}</div>
-    </div>
+  </div>`;
+}
+
+function renderEventContent(ev){
+  document.getElementById("evContent").innerHTML = `<div class="ev-cols">
+    <div class="ev-col">${programsBlock(ev)}</div>
+    <div class="ev-col">${shuttleBlock(ev)}</div>
   </div>`;
   Object.keys(SHUTTLE_MAPS).forEach(k=>delete SHUTTLE_MAPS[k]);
   if(ev.shuttle) initShuttleMap(ev);
@@ -660,18 +667,23 @@ function renderMonth(month){
     panel.innerHTML = `<div class="month-empty"><span class="ko">이 달에는 예정된 행사가 없습니다.</span><span class="en">No events scheduled this month.</span></div>`;
     return;
   }
-  const tabs = evs.length > 1 ? `<div class="ev-tabs" role="tablist">` + evs.map((ev,i)=>
-    `<button class="ev-tab${i===0?" on":""}" role="tab" aria-selected="${i===0}" data-ev="${ev.id}">
-      <b>${+ev.s.slice(5,7)}/${+ev.s.slice(8,10)}</b>
-      <span><span class="ko">${ev.ko}</span><span class="en">${ev.en}</span></span>
-    </button>`).join("") + `</div>` : "";
-  panel.innerHTML = tabs + `<div id="evDetail"></div>`;
-  panel.querySelectorAll(".ev-tab").forEach(t=>t.addEventListener("click",()=>{
-    panel.querySelectorAll(".ev-tab").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-selected","false");});
-    t.classList.add("on"); t.setAttribute("aria-selected","true");
-    renderEventDetail(EVENTS.find(e=>e.id===t.dataset.ev));
-  }));
-  renderEventDetail(evs[0]);
+  const multi = evs.length > 1;
+  panel.innerHTML = `<div class="ev-banners${multi?" multi":""}" ${multi?'role="tablist"':''}>` +
+    evs.map((ev,i)=>bannerHTML(ev, i===0, multi)).join("") +
+    `</div><div id="evContent"></div>`;
+  if(multi){
+    panel.querySelectorAll(".ebanner.sel").forEach(bn=>{
+      const activate = ()=>{
+        if(bn.classList.contains("on")) return;
+        panel.querySelectorAll(".ebanner.sel").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-selected","false");});
+        bn.classList.add("on"); bn.setAttribute("aria-selected","true");
+        renderEventContent(EVENTS.find(e=>e.id===bn.dataset.ev));
+      };
+      bn.addEventListener("click", activate);
+      bn.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();activate();} });
+    });
+  }
+  renderEventContent(evs[0]);
 }
 
 function initMonthTabs(){
