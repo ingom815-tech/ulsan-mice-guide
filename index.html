@@ -132,37 +132,32 @@
   .month-event.open .acc-chev{transform:rotate(180deg)}
   .acc-body[hidden]{display:none}
   .acc-body{animation:fadein .25s ease}
-  .ev-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:14px}
-  .ev-col .shuttle-box{margin-top:0}
+  .ev-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;margin-top:14px}
   .ev-col .prog-head{margin-top:0}
-  .ev-cols .exp-grid{grid-template-columns:1fr}
   .month-event{margin-bottom:14px}
   .month-event.open{margin-bottom:30px}
   /* ── 체험프로그램 카드 ── */
+  .prog-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;height:100%}
+  .exp-row{display:flex;gap:15px;align-items:flex-start;padding:15px 0;border-bottom:1px dashed var(--line)}
+  .exp-row:last-child{border-bottom:none;padding-bottom:4px}
+  .exp-row:first-of-type{margin-top:4px}
+  .exp-thumb{flex:0 0 96px;width:96px;height:96px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+  .exp-info{flex:1;min-width:0}
+  .exp-info h3{font-size:1rem;font-weight:700;line-height:1.3}
+  .exp-info p{font-size:.82rem;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+  .exp-meta-line{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .em-chip{display:inline-flex;align-items:center;gap:5px;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:4px 11px;font-size:.74rem;font-weight:600;color:var(--ink)}
+  .em-chip svg{color:var(--orange)}
+  .exp-row.tba-row{align-items:center;gap:10px;color:var(--ink-soft);font-size:.84rem}
+  .exp-row.tba-row svg{color:var(--orange);flex:0 0 auto}
   .prog-head{display:flex;align-items:center;gap:8px;margin:20px 0 4px;font-weight:800;font-size:1rem;color:var(--brown)}
   .prog-count{background:rgba(245,130,32,.15);color:var(--orange);font-size:.74rem;font-weight:800;border-radius:99px;padding:2px 10px}
-  .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px}
-  .exp-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);position:relative;transition:.25s;display:flex;flex-direction:column;overflow:hidden}
-  .exp-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(42,33,27,.09);border-color:var(--orange)}
-  .exp-photo{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform .35s ease}
-  .exp-card:hover .exp-photo{transform:scale(1.04)}
-  .exp-body{padding:20px 22px 24px;display:flex;flex-direction:column;flex:1}
-  .exp-body h3{font-size:1.1rem;font-weight:700}
-  .exp-body p{font-size:.86rem;color:var(--ink-soft);margin-top:8px;flex:1}
-  .exp-meta{display:flex;flex-direction:column;gap:6px;margin-top:12px;padding:11px 13px;background:var(--paper);border:1px solid var(--line);border-radius:10px}
-  .em-row{display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--ink)}
-  .em-row svg{color:var(--orange);flex:0 0 auto}
-  .em-row b{font-weight:700;color:var(--ink-soft);font-size:.76rem;margin-right:2px}
-  .exp-tba{border:1.5px dashed var(--line);border-radius:var(--radius);background:var(--paper);display:flex;align-items:center;justify-content:center;text-align:center;padding:26px 20px;color:var(--ink-soft);font-size:.88rem}
-  .swipe-hint{display:none;align-items:center;gap:6px;margin-top:10px;font-size:.78rem;color:var(--ink-soft);font-weight:500}
-  .swipe-hint svg{animation:nudge 1.6s ease-in-out infinite}
-  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
   .shuttle-box{margin-top:16px}
   .sb-event{display:flex;align-items:center;gap:12px;padding-bottom:14px;margin-bottom:16px;border-bottom:1.5px dashed var(--line)}
   .sb-event .sb-date{background:var(--brown);color:#fff;border-radius:10px;padding:7px 13px;font-weight:800;font-size:.95rem;letter-spacing:-.01em;white-space:nowrap}
   .sb-event b{font-size:1.02rem;font-weight:800;line-height:1.35}
   .sb-event .sb-venue{display:block;font-size:.78rem;color:var(--ink-soft);font-weight:500;margin-top:2px}
-  .shuttle-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-top:14px}
+  .shuttle-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;height:100%}
   .sb-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1rem;color:var(--brown);margin-bottom:14px}
   .roundtrip{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:700;color:var(--orange);border:1.5px solid var(--orange);border-radius:99px;padding:3px 12px;margin-bottom:12px}
   .hflow{display:flex;flex-wrap:wrap;align-items:center;row-gap:10px;margin-bottom:14px}
@@ -176,7 +171,7 @@
   .tt-dir b svg{color:var(--brown)}
   .tt-times{display:flex;flex-wrap:wrap;gap:7px}
   .tt-chip{background:#fff;border:1.5px solid var(--brown);color:var(--brown);border-radius:9px;padding:5px 12px;font-size:.84rem;font-weight:800;letter-spacing:.02em}
-  .sb-map{width:100%;height:250px;border-radius:12px;border:1px solid var(--line);margin-top:2px;z-index:1;position:relative}
+  .sb-map{width:100%;height:290px;border-radius:12px;border:1px solid var(--line);margin-top:2px;z-index:1;position:relative}
   .sb-map.osm-muted .leaflet-tile{filter:grayscale(.75) saturate(.6) brightness(1.06) contrast(.92)}
   .mkr{width:30px;height:30px;border-radius:50%;background:var(--orange);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(42,33,27,.35)}
   .mkr svg{width:16px;height:16px}
@@ -250,14 +245,12 @@
     .eb-dday{top:12px;right:12px}
     .eb-main{padding-right:70px}
     .acc-head .eb-inner{padding-bottom:30px}
-    .exp-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-left:-18px;margin-right:-18px;padding:4px 18px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-    .exp-grid::-webkit-scrollbar{display:none}
-    .exp-grid .exp-card{flex:0 0 80%;max-width:320px;scroll-snap-align:center}
-    .swipe-hint{display:flex}
     .ev-cols{grid-template-columns:1fr;gap:12px}
     .acc-chev{bottom:12px;right:12px;width:30px;height:30px}
+    .prog-box{padding:20px 18px}
+    .exp-thumb{flex-basis:78px;width:78px;height:78px}
     .sb-row{flex-direction:column;align-items:flex-start;gap:8px;padding:11px 0}
-    .sb-map{width:100%;height:250px;border-radius:12px;border:1px solid var(--line);margin-top:2px;z-index:1;position:relative}
+    .sb-map{width:100%;height:290px;border-radius:12px;border:1px solid var(--line);margin-top:2px;z-index:1;position:relative}
   .sb-map.osm-muted .leaflet-tile{filter:grayscale(.75) saturate(.6) brightness(1.06) contrast(.92)}
   .mkr{width:30px;height:30px;border-radius:50%;background:var(--orange);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(42,33,27,.35)}
   .mkr svg{width:16px;height:16px}
@@ -490,7 +483,7 @@ const MKR_SVG = {
 };
 function mapBase(m){
   let errs = 0, fell = false;
-  const carto = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+  const carto = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
     {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>', maxZoom:19, subdomains:"abcd"});
   carto.on("tileerror", ()=>{
     if(++errs >= 3 && !fell){
@@ -501,6 +494,23 @@ function mapBase(m){
     }
   });
   carto.addTo(m);
+}
+async function drawRoadRoute(m, pts, sh){
+  try{
+    if(!sh.__route){
+      const co = pts.map(p=>p[1]+","+p[0]).join(";");
+      const r = await fetch(`https://router.project-osrm.org/route/v1/driving/${co}?overview=full&geometries=geojson`);
+      if(!r.ok) throw 0;
+      const j = await r.json();
+      sh.__route = j.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+    }
+    L.polyline(sh.__route, {color:"#fff", weight:7, opacity:.95}).addTo(m);
+    L.polyline(sh.__route, {color:"#A44B23", weight:4, opacity:.95}).addTo(m);
+    const rb = L.latLngBounds(sh.__route.concat(pts)).pad(0.12);
+    m.__b = rb; m.fitBounds(rb);
+  }catch(e){
+    L.polyline(pts, {color:"#A44B23", weight:3.5, opacity:.85, dashArray:"7 7"}).addTo(m);
+  }
 }
 function initShuttleMap(ev){
   if(typeof L === "undefined" || !ev || !ev.shuttle) return;
@@ -520,9 +530,9 @@ function initShuttleMap(ev){
       .bindTooltip(`<span class="map-label${s.hub?" hub":""}"><span class="ko">${s.ko}</span><span class="en">${s.en}</span></span>`,
         {permanent:true, direction:dir, offset:off, className:"map-tt"});
   });
-  L.polyline(pts, {color:"#A44B23", weight:3.5, opacity:.85}).addTo(m);
   const b = L.latLngBounds(pts).pad(0.35);
   m.fitBounds(b); m.__b = b;
+  drawRoadRoute(m, pts, ev.shuttle);
   SHUTTLE_MAPS[ev.id] = m;
 }
 function refitShuttleMap(id){
@@ -586,41 +596,36 @@ function statusOf(ev, today){
 }
 
 function programsBlock(ev){
-  let cards = "";
-  const n = ev.programs ? ev.programs.length : 0;
-  if(ev.programs){
-    cards = ev.programs.map(p=>{
-      const info = PROGRAM_INFO[p.id];
-      return `<article class="exp-card">
-        <img class="exp-photo" src="${info.img}" alt="${info.ko}" loading="lazy">
-        <div class="exp-body">
-          <h3><span class="ko">${info.ko}</span><span class="en">${info.en}</span></h3>
-          <p><span class="ko">${info.dko}</span><span class="en">${info.den}</span></p>
-          <div class="exp-meta">
-            <span class="em-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><b><span class="ko">운영일</span><span class="en">Dates</span></b><span class="ko">${p.days}</span><span class="en">${p.daysEn}</span></span>
-            <span class="em-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><b><span class="ko">운영시간</span><span class="en">Hours</span></b><span class="ko">${p.time}</span><span class="en">${p.timeEn}</span></span>
-          </div>
-        </div>
-      </article>`;
-    }).join("");
-    if(ev.moreComing){
-      cards += `<div class="exp-tba"><span><span class="ko">체험프로그램이 추가될 예정입니다.<br>확정되는 대로 안내드리겠습니다.</span><span class="en">More programs will be added soon.</span></span></div>`;
-    }
-  }
-  const head = `<div class="prog-head">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6L7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg>
-      <span class="ko">체험프로그램</span><span class="en">Experience Programs</span>${n?`<span class="prog-count">${n}</span>`:""}
-    </div>`;
+  const head = `<div class="prog-head" style="margin:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6L7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg><span class="ko">체험프로그램</span><span class="en">Experience Programs</span>${ev.programs?`<span class="prog-count">${ev.programs.length}</span>`:""}</div>`;
   if(!ev.programs){
-    return head + `<div class="sb-tba" style="margin-top:10px">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      <span><span class="ko">체험프로그램 정보는 추후 공지됩니다.</span><span class="en">Program information will be announced soon.</span></span>
+    return `<div class="prog-box">${head}
+      <div class="sb-tba" style="margin-top:14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span><span class="ko">체험프로그램 정보는 추후 공지됩니다.</span><span class="en">Program information will be announced soon.</span></span>
+      </div>
     </div>`;
   }
-  return head + `<div class="swipe-hint" aria-hidden="true">
-      <span class="ko">옆으로 넘겨서 더 보기</span><span class="en">Swipe to see more</span>
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </div><div class="exp-grid">${cards}</div>`;
+  let rows = ev.programs.map(p=>{
+    const info = PROGRAM_INFO[p.id];
+    return `<div class="exp-row">
+      <img class="exp-thumb" src="${info.img}" alt="${info.ko}" loading="lazy">
+      <div class="exp-info">
+        <h3><span class="ko">${info.ko}</span><span class="en">${info.en}</span></h3>
+        <p><span class="ko">${info.dko}</span><span class="en">${info.den}</span></p>
+        <div class="exp-meta-line">
+          <span class="em-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="ko">${p.days}</span><span class="en">${p.daysEn}</span></span>
+          <span class="em-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="ko">${p.time}</span><span class="en">${p.timeEn}</span></span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  if(ev.moreComing){
+    rows += `<div class="exp-row tba-row">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      <span><span class="ko">체험프로그램이 추가될 예정입니다. 확정되는 대로 안내드리겠습니다.</span><span class="en">More programs will be added soon.</span></span>
+    </div>`;
+  }
+  return `<div class="prog-box">${head}${rows}</div>`;
 }
 
 function renderMonth(month){

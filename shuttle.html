@@ -54,7 +54,7 @@
   .hlink{flex:0 0 auto;width:20px;height:2.5px;margin:0 3px;background:repeating-linear-gradient(to right,var(--orange) 0 5px,transparent 5px 9px)}
   .hours{display:inline-flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:9px 15px;font-size:.86rem;font-weight:600}
   .hours svg{color:var(--orange)}
-  .sb-map{width:100%;height:260px;border-radius:12px;border:1px solid var(--line);margin-top:14px;z-index:1;position:relative}
+  .sb-map{width:100%;height:300px;border-radius:12px;border:1px solid var(--line);margin-top:14px;z-index:1;position:relative}
   .sb-map.osm-muted .leaflet-tile{filter:grayscale(.75) saturate(.6) brightness(1.06) contrast(.92)}
   .mkr{width:30px;height:30px;border-radius:50%;background:var(--orange);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(42,33,27,.35)}
   .mkr svg{width:16px;height:16px}
@@ -217,7 +217,7 @@ function initMap(sh){
   };
   const m = L.map(el, {scrollWheelZoom:false});
   let errs=0, fell=false;
-  const carto = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+  const carto = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
     {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>', maxZoom:19, subdomains:"abcd"});
   carto.on("tileerror", ()=>{
     if(++errs>=3 && !fell){ fell=true; m.removeLayer(carto);
@@ -237,8 +237,21 @@ function initMap(sh){
       .bindTooltip(`<span class="map-label${s.hub?" hub":""}"><span class="ko">${s.ko}</span><span class="en">${s.en}</span></span>`,
         {permanent:true, direction:dir, offset:off, className:"map-tt"});
   });
-  L.polyline(pts,{color:"#A44B23",weight:3.5,opacity:.85}).addTo(m);
   m.fitBounds(L.latLngBounds(pts).pad(0.35));
+  (async ()=>{
+    try{
+      const co = pts.map(p=>p[1]+","+p[0]).join(";");
+      const r = await fetch(`https://router.project-osrm.org/route/v1/driving/${co}?overview=full&geometries=geojson`);
+      if(!r.ok) throw 0;
+      const j = await r.json();
+      const road = j.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+      L.polyline(road,{color:"#fff",weight:7,opacity:.95}).addTo(m);
+      L.polyline(road,{color:"#A44B23",weight:4,opacity:.95}).addTo(m);
+      m.fitBounds(L.latLngBounds(road.concat(pts)).pad(0.12));
+    }catch(e){
+      L.polyline(pts,{color:"#A44B23",weight:3.5,opacity:.85,dashArray:"7 7"}).addTo(m);
+    }
+  })();
   const st=document.createElement("style");
   st.textContent=".map-tt{background:transparent;border:none;box-shadow:none;padding:0}.map-tt::before{display:none}";
   document.head.appendChild(st);
