@@ -109,8 +109,6 @@
   .m-tab.on .m-dot{background:#fff}
   .m-tab.past:not(.on){opacity:.5}
   .month-empty{background:#fff;border:1.5px dashed var(--line);border-radius:var(--radius);padding:44px 20px;text-align:center;color:var(--ink-soft)}
-  .month-event{margin-bottom:38px;animation:fadein .3s ease}
-  .month-event:last-of-type{margin-bottom:8px}
   /* ── 행사 배너 ── */
   .ebanner{position:relative;border-radius:var(--radius);overflow:hidden;color:#fff;background:linear-gradient(108deg,#6E2F12 0%,#A44B23 46%,#C4611E 100%);box-shadow:0 14px 34px rgba(126,54,23,.28);min-height:168px;display:flex;align-items:stretch}
   .eb-photo{position:absolute;right:0;top:0;bottom:0;width:100%;object-fit:cover;object-position:center 30%}
@@ -126,6 +124,18 @@
   .eb-dday.ongoing{background:var(--orange);color:#fff;animation:pulse 2s infinite}
   .eb-dday.done{background:rgba(255,255,255,.25);color:#fff}
   .ebanner.ended{filter:grayscale(.85);opacity:.72}
+  .acc-head{cursor:pointer}
+  .acc-head:hover .eb-photo{opacity:.92}
+  .acc-chev{position:absolute;bottom:14px;right:16px;z-index:3;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--brown);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.22);transition:transform .25s ease}
+  .month-event.open .acc-chev{transform:rotate(180deg)}
+  .acc-body[hidden]{display:none}
+  .acc-body{animation:fadein .25s ease}
+  .ev-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:14px}
+  .ev-col .shuttle-box{margin-top:0}
+  .ev-col .prog-head{margin-top:0}
+  .ev-cols .exp-grid{grid-template-columns:1fr}
+  .month-event{margin-bottom:14px}
+  .month-event.open{margin-bottom:30px}
   /* ── 체험프로그램 카드 ── */
   .prog-head{display:flex;align-items:center;gap:8px;margin:20px 0 4px;font-weight:800;font-size:1rem;color:var(--brown)}
   .prog-count{background:rgba(245,130,32,.15);color:var(--orange);font-size:.74rem;font-weight:800;border-radius:99px;padding:2px 10px}
@@ -229,10 +239,13 @@
     .eb-date b{font-size:1.4rem}
     .eb-dday{top:12px;right:12px}
     .eb-main{padding-right:70px}
+    .acc-head .eb-inner{padding-bottom:30px}
     .exp-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-left:-18px;margin-right:-18px;padding:4px 18px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
     .exp-grid::-webkit-scrollbar{display:none}
     .exp-grid .exp-card{flex:0 0 80%;max-width:320px;scroll-snap-align:center}
     .swipe-hint{display:flex}
+    .ev-cols{grid-template-columns:1fr;gap:12px}
+    .acc-chev{bottom:12px;right:12px;width:30px;height:30px}
     .sb-row{flex-direction:column;align-items:flex-start;gap:8px;padding:11px 0}
     .sb-headrow{flex-wrap:wrap}
     .shuttle-box{padding:20px 18px}
@@ -547,12 +560,13 @@ function renderMonth(month){
     panel.innerHTML = `<div class="month-empty"><span class="ko">이 달에는 예정된 행사가 없습니다.</span><span class="en">No events scheduled this month.</span></div>`;
     return;
   }
-  panel.innerHTML = evs.map(ev=>{
+  panel.innerHTML = evs.map((ev,idx)=>{
     const st = statusOf(ev, today);
     const dateKo = ev.s===ev.e ? fmtKo(ev.s) : `${fmtKo(ev.s)} ~ ${fmtKo(ev.e)}`;
     const dateEn = ev.s===ev.e ? fmtEn(ev.s) : `${fmtEn(ev.s)} – ${fmtEn(ev.e)}`;
-    return `<div class="month-event">
-      <div class="ebanner${st.cls==="done"?" ended":""}">
+    const open = idx===0;
+    return `<div class="month-event${open?" open":""}">
+      <div class="ebanner acc-head${st.cls==="done"?" ended":""}" role="button" tabindex="0" aria-expanded="${open}">
         <img class="eb-photo" src="${ev.poster}" alt="" loading="lazy">
         <span class="eb-dday ${st.cls}"><span class="ko">${st.ko}</span><span class="en">${st.en}</span></span>
         <div class="eb-inner">
@@ -563,9 +577,14 @@ function renderMonth(month){
             <span class="eb-venue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="ko">${ev.vko}</span><span class="en">${ev.ven}</span></span>
           </div>
         </div>
+        <span class="acc-chev" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
       </div>
-      ${programsBlock(ev)}
-      ${shuttleBlock(ev)}
+      <div class="acc-body"${open?"":" hidden"}>
+        <div class="ev-cols">
+          <div class="ev-col">${programsBlock(ev)}</div>
+          <div class="ev-col">${shuttleBlock(ev)}</div>
+        </div>
+      </div>
     </div>`;
   }).join("");
 }
@@ -593,14 +612,31 @@ function initMonthTabs(){
 initMonthTabs();
 
 // 시간표 펼침/접힘 (같은 화면 내)
-document.getElementById("monthPanel").addEventListener("click", e=>{
+const monthPanelEl = document.getElementById("monthPanel");
+monthPanelEl.addEventListener("click", e=>{
   const btn = e.target.closest(".sb-toggle");
-  if(!btn) return;
-  const tt = btn.nextElementSibling;
-  const open = tt.hidden;
-  tt.hidden = !open;
-  btn.setAttribute("aria-expanded", open);
-  btn.classList.toggle("open", open);
+  if(btn){
+    const tt = btn.nextElementSibling;
+    const open = tt.hidden;
+    tt.hidden = !open;
+    btn.setAttribute("aria-expanded", open);
+    btn.classList.toggle("open", open);
+    return;
+  }
+  const head = e.target.closest(".acc-head");
+  if(head){
+    const item = head.closest(".month-event");
+    const body = item.querySelector(".acc-body");
+    const open = body.hidden;
+    body.hidden = !open;
+    item.classList.toggle("open", open);
+    head.setAttribute("aria-expanded", open);
+  }
+});
+monthPanelEl.addEventListener("keydown", e=>{
+  if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("acc-head")){
+    e.preventDefault(); e.target.click();
+  }
 });
 
 
@@ -608,8 +644,8 @@ document.getElementById("monthPanel").addEventListener("click", e=>{
 function videoEmbed(url){
   if(!url) return null;
   const yt = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/);
-  if(yt) return `<iframe src="https://www.youtube.com/embed/${yt[1]}" title="울산국제회의지구 홍보영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-  return `<video controls preload="metadata" src="${url}"></video>`;
+  if(yt) return `<iframe src="https://www.youtube.com/embed/${yt[1]}?autoplay=1&mute=1&loop=1&playlist=${yt[1]}" title="울산국제회의지구 홍보영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  return `<video controls autoplay muted loop playsinline preload="auto" src="${url}"></video>`;
 }
 function applyVideo(){
   const lang = document.body.dataset.lang;
