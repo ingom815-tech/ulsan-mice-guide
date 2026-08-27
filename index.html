@@ -355,7 +355,7 @@
     <h2 class="sec-title"><span class="ko">원스톱 서비스 안내</span><span class="en">One-Stop Service</span></h2>
     <p class="sec-desc">
       <span class="ko">울산국제회의지구에서 개최되는 MICE 행사와 함께 운영되는 체험 프로그램, 셔틀버스 정보를 확인할 수 있습니다.</span>
-      <span class="en">You can check information on experience programs and shuttle buses operated along with MICE events held in the Ulsan Global MICE District.</span>
+      <span class="en">You can check information on Local Activities and shuttle buses operated along with MICE events held in the Ulsan Global MICE District.</span>
     </p>
 
     <div class="guideline">
@@ -600,7 +600,7 @@ function statusOf(ev, today){
 }
 
 function programsBlock(ev){
-  const head = `<div class="prog-head" style="margin:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6L7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg><span class="ko">체험프로그램</span><span class="en">Experience Programs</span>${ev.programs?`<span class="prog-count">${ev.programs.length}</span>`:""}</div>`;
+  const head = `<div class="prog-head" style="margin:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6L7.1 18.2 8 12.7 4 8.8 9.5 8z"/></svg><span class="ko">체험프로그램</span><span class="en">Local Activities</span>${ev.programs?`<span class="prog-count">${ev.programs.length}</span>`:""}</div>`;
   if(!ev.programs){
     return `<div class="prog-box">${head}
       <div class="sb-tba" style="margin-top:14px">
