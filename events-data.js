@@ -13,7 +13,7 @@ const EVENTS = [
        {dko:"UECO → 울산역(KTX)", den:"UECO → Ulsan Stn (KTX)", t:["18:20","18:40","20:00","20:20"]}
      ]
    }},
-  {id:"expo", poster:"images/banner-tre.jpg", programs:null, ko:"2026 울산세계미래산업박람회", en:"2026 Ulsan World Future Industry Expo",
+  {id:"expo", poster:"images/banner-tre.jpg", programs:null, ko:"WAVE 2026 (World Advanced Vision Expo)", en:"WAVE 2026 (World Advanced Vision Expo)",
    s:"2026-09-10", e:"2026-09-12", vko:"유에코", ven:"UECO", month:9,
    shuttle:null},
   {id:"ummff", poster:"images/banner-bok.jpg", programs:null, ko:"제11회 울산울주세계산악영화제", en:"11th Ulsan Ulju Mountain Film Festival",
