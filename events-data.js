@@ -3,13 +3,13 @@ const EVENTS = [
   {id:"ulsan-forum", poster:"images/banner-ban.jpg", programs:null, ko:"제4회 지속가능한 마이스·관광 울산포럼", en:"4th Sustainable MICE & Tourism Ulsan Forum",
    s:"2026-07-15", e:"2026-07-15", vko:"유에코", ven:"UECO", month:7,
    shuttle:null},
-  {id:"kalgs", poster:"images/banner-hya.jpg", programs:[{id:"trevier", days:"8. 28.(금)", daysEn:"Aug 28 (Fri)", time:"운영시간 추후 공지", timeEn:"Hours TBA"}], moreComing:true, ko:"한국지방정부학회 하계학술대회", en:"KALGS Summer Conference",
+  {id:"kalgs", poster:"images/banner-hya.jpg", programs:[{id:"trevier", days:"8. 28.(금)", daysEn:"Aug 28 (Fri)", time:"16:50 ~ 18:10", timeEn:"16:50 – 18:10"}], moreComing:true, ko:"한국지방정부학회 하계학술대회", en:"KALGS Summer Conference",
    s:"2026-08-28", e:"2026-08-28", vko:"유에코", ven:"UECO", month:8,
    shuttle:{
      stops:[{ko:"울산역 (KTX)",en:"KTX Ulsan Station",c:[35.551431,129.138506],icon:"train",dir:"bottom"},{ko:"UECO",en:"UECO",hub:true,c:[35.555695,129.131635],icon:"hub",dir:"top"}],
      hoursKo:"오전 11:30 ~ 오후 8:20 (행사 기간 중)", hoursEn:"11:30 AM – 8:20 PM (during the event)",
      table:[
-       {dko:"울산역(KTX) → UECO", den:"Ulsan Stn (KTX) → UECO", t:["11:30","11:50","12:10","12:30","12:50"]},
+       {dko:"울산역(KTX) → UECO", den:"Ulsan Stn (KTX) → UECO", t:["11:30","11:50","12:10","12:30"]},
        {dko:"UECO → 울산역(KTX)", den:"UECO → Ulsan Stn (KTX)", t:["18:20","18:40","20:00","20:20"]}
      ]
    }},
